@@ -2,6 +2,7 @@ import asyncio
 import json
 import time
 import uuid
+import asyncio
 
 from gmqtt import Client as MQTTClient
 
@@ -61,13 +62,24 @@ class MQTTService:
         if self.settings.mqtt_username:
             self.client.set_auth_credentials(self.settings.mqtt_username, self.settings.mqtt_password)
         try:
-            # Melakukan koneksi kilat ke broker MQTT
+            # 1. Buka koneksi ke broker
             await self.client.connect(self.settings.mqtt_host, self.settings.mqtt_port)
-            self.client.publish(self.settings.mqtt_control_topic, json.dumps({"command": command, "speed": speed}), qos=1)
-            # Langsung putuskan koneksi agar tidak membeku di serverless Vercel
+            
+            # 2. Kirim data perintah ke topik robot
+            self.client.publish(
+                self.settings.mqtt_control_topic, 
+                json.dumps({"command": command, "speed": speed}), 
+                qos=1
+            )
+            
+            # 3. TAMBAHKAN JEDA INI (Menunggu 0.5 detik agar paket data benar-benar terkirim)
+            await asyncio.sleep(0.5)
+            
+            # 4. Putuskan koneksi dengan aman setelah data terkirim
             await self.client.disconnect()
             return True
-        except Exception:
+        except Exception as e:
+            print(f"MQTT Error: {e}")
             return False
 
 

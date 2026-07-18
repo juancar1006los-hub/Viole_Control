@@ -84,30 +84,25 @@ async function setup() {
 }
 
 // Inisialisasi dan manajemen koneksi WebSocket secara Real-Time
-function socket() { 
-  const ws = new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/ws`); 
-  
-  ws.onopen = () => {
-    $('connection').textContent = '● Dashboard online';
-    $('connection').className = 'badge online';
-  }; 
-  
-  ws.onmessage = e => {
-    const m = JSON.parse(e.data);
-    if (m.type === 'telemetry') render(m.data);
-  }; 
-  
-  ws.onclose = () => {
-    $('connection').textContent = '● Terputus';
-    $('connection').className = 'badge offline';
-    setTimeout(socket, 2000); // Reconnect otomatis setiap 2 detik jika terputus
-  }; 
-  
-  // Mengirim ping setiap 25 detik agar koneksi websocket tidak mati (Keep-alive)
-  setInterval(() => {
-    if (ws.readyState === 1) ws.send('ping');
-  }, 25000); 
-} 
+// Ganti fungsi socket() lama Anda dengan kode ini
+function socket() {
+  $('connection').textContent = '● Dashboard online (Serverless)';
+  $('connection').className = 'badge online';
+
+  // Melakukan fetch telemetri secara berkala setiap 2 detik ke backend
+  setInterval(async () => {
+    try {
+      const r = await fetch('/api/telemetry');
+      if (r.ok) {
+        const data = await r.json();
+        render(data);
+      }
+    } catch (e) {
+      $('connection').textContent = '● Terputus dari server';
+      $('connection').className = 'badge offline';
+    }
+  }, 2000); 
+}
 
 // Menjalankan fungsi setup dan websocket saat halaman dimuat
 setup();

@@ -56,11 +56,19 @@ class MQTTService:
             snapshot = robot_state.copy()
         await manager.broadcast({"type": "telemetry", "data": snapshot})
 
-    def publish_command(self, command, speed):
-        if not self.connected:
+    # Ganti fungsi publish_command lama Anda dengan versi asinkron ini
+    async def publish_command(self, command, speed):
+        if self.settings.mqtt_username:
+            self.client.set_auth_credentials(self.settings.mqtt_username, self.settings.mqtt_password)
+        try:
+            # Melakukan koneksi kilat ke broker MQTT
+            await self.client.connect(self.settings.mqtt_host, self.settings.mqtt_port)
+            self.client.publish(self.settings.mqtt_control_topic, json.dumps({"command": command, "speed": speed}), qos=1)
+            # Langsung putuskan koneksi agar tidak membeku di serverless Vercel
+            await self.client.disconnect()
+            return True
+        except Exception:
             return False
-        self.client.publish(self.settings.mqtt_control_topic, json.dumps({"command": command, "speed": speed}), qos=1)
-        return True
 
 
 mqtt_service = MQTTService()

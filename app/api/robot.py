@@ -36,7 +36,7 @@ async def command(data: Command):
         data.command = "right"
     elif data.command == "right":
         data.command = "left"
-    if not mqtt_service.publish_command(data.command, data.speed):
+    if not await mqtt_service.publish_command(data.command, data.speed):
         raise HTTPException(status_code=503, detail="Broker MQTT tidak terhubung")
     async with state_lock:
         robot_state["direction"] = data.command

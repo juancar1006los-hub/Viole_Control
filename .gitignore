@@ -1,0 +1,19 @@
+# Kredensial & Variabel Lingkungan (WAJIB DISUBNYIKAN)
+.env
+.env.local
+
+# Virtual Environment (Agar tidak memperberat ukuran upload)
+.venv/
+venv/
+ENV/
+env/
+
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Folder log atau file dump data
+*.log

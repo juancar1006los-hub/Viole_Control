@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a101b">
+  <title>Viole Control</title>
+  <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Robot Control beranda">
+        <span class="brand-mark" aria-hidden="true">R</span>
+        <span>Viole<span>Control</span></span>
+      </a>
+      <div id="connection" class="connection is-offline" role="status"><i></i><span>Menghubungkan</span></div>
+    </header>
+
+    <section class="hero" aria-labelledby="page-title">
+      <div><p class="kicker">ESP32 • LIVE CONTROL</p><h1 id="page-title">Kendali dalam satu layar.</h1></div>
+      <p class="hero-copy">Lihat kondisi sekitar robot secara langsung dan arahkan pergerakannya dengan presisi.</p>
+    </section>
+
+    <section class="dashboard">
+      <article class="camera-panel panel">
+        <div class="panel-head"><div><p class="label">KAMERA DEPAN</p><h2>Live stream</h2></div><span id="camera-state" class="stream-state">MEMUAT</span></div>
+        <div class="camera-frame">
+          <img id="camera" alt="Live stream dari ESP32-CAM">
+          <div id="camera-placeholder" class="camera-empty"><span class="camera-icon">◉</span><strong>Kamera belum tersedia</strong><small>Periksa ESP32-CAM dan alamat stream.</small></div>
+          <div class="camera-overlay"><span>● LIVE</span><time id="clock">--:--:--</time></div>
+        </div>
+      </article>
+
+      <aside class="control-panel panel">
+        <div class="panel-head"><div><p class="label">PENGENDALIAN</p><h2>Gerakkan robot</h2></div></div>
+        <div class="direction-pad" aria-label="Kontrol arah robot">
+          <button class="direction up" data-command="forward" aria-label="Maju"><span>↑</span></button>
+          <button class="direction left" data-command="left" aria-label="Belok kiri"><span>←</span></button>
+          <button class="direction down" data-command="backward" aria-label="Mundur"><span>↓</span></button>
+          <button class="direction right" data-command="right" aria-label="Belok kanan"><span>→</span></button>
+          <button id="stop" class="direction stop" aria-label="Berhenti">■</button>
+        </div>
+        <div class="speed-control"><div><label for="speed">Kecepatan</label><output id="speed-value">70%</output></div><input id="speed" type="range" min="0" max="255" value="180" aria-label="Kecepatan motor"></div>
+        <p class="keyboard-hint"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> atau tombol panah untuk mengontrol</p>
+      </aside>
+    </section>
+
+    <section class="telemetry" aria-label="Status robot">
+      <article class="metric panel"><span class="metric-icon">ϟ</span><div><p>BATERAI</p><strong id="battery">-- <small>V</small></strong></div></article>
+      <article class="metric panel"><span class="metric-icon">⌁</span><div><p>JARAK</p><strong id="distance">-- <small>cm</small></strong></div></article>
+      <article class="metric panel"><span class="metric-icon">◌</span><div><p>SUHU</p><strong id="temperature">-- <small>°C</small></strong></div></article>
+      <article class="metric panel"><span class="metric-icon">⌁</span><div><p>STATUS</p><strong id="status" class="status-value">Menunggu</strong></div></article>
+    </section>
+  </main>
+  <script src="../static/script.js"></script>
+</body>
+</html>

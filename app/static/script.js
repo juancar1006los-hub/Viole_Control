@@ -108,9 +108,7 @@ if (r.ok) {
     
     render(data);
 }
-    
-    render(data);
-}
+
     } catch (e) {
       $('connection').textContent = '● Terputus dari server';
       $('connection').className = 'badge offline';

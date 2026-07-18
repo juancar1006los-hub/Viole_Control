@@ -92,11 +92,25 @@ function socket() {
   // Melakukan fetch telemetri secara berkala setiap 2 detik ke backend
   setInterval(async () => {
     try {
-      const r = await fetch('/api/telemetry');
-      if (r.ok) {
-        const data = await r.json();
-        render(data);
-      }
+// Di dalam fungsi polling interval Anda:
+const r = await fetch('/api/telemetry');
+if (r.ok) {
+    const data = await r.json();
+    
+    // VERIFIKASI BARIS INI:
+    // Cari elemen gambar kamera Anda (misal id-nya 'camera-stream')
+    const imgCam = document.getElementById('camera-stream'); 
+    
+    // Ubah src gambar secara dinamis ke URL Ngrok yang dikirim backend
+    if (imgCam && data.camera_url) {
+        imgCam.src = data.camera_url;
+    }
+    
+    render(data);
+}
+    
+    render(data);
+}
     } catch (e) {
       $('connection').textContent = '● Terputus dari server';
       $('connection').className = 'badge offline';

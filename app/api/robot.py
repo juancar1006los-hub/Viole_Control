@@ -23,12 +23,13 @@ async def config():
 
 
 @router.get("/telemetry")
-async def telemetry():
-    async with state_lock:
-        snapshot = robot_state.copy()
-    snapshot["mqtt_connected"] = mqtt_service.connected
-    return snapshot
-
+async def get_telemetry():
+    # Pastikan 'camera_url' dikirim ke frontend mengambil dari settings env
+    return {
+        "status": "online",
+        "camera_url": settings.camera_stream_url, 
+        # ... data telemetri robot lainnya seperti speed, direction, dll.
+    }
 
 @router.post("/command")
 async def command(data: Command):
